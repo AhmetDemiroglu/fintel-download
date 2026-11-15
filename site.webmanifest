@@ -1,22 +1,25 @@
 {
   "name": "Fintel",
   "short_name": "Fintel",
-  "description": "Evin hesabı, cebinde.",
+  "description": "Evin hesabı, cebinde. Maaş dönemi, günlük limit, taksit ve fişten kayıt.",
   "lang": "tr",
-  "start_url": "/",
-  "display": "browser",
-  "background_color": "#F6F5F1",
+  "start_url": "/marketing/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
   "theme_color": "#1B2A52",
   "icons": [
     {
       "src": "/assets/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "/assets/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
