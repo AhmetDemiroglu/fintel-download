@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fintel.septimuslab.com/sitemap.xml
