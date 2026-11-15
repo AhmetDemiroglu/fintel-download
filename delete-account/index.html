@@ -1,0 +1,939 @@
+<!doctype html>
+<html lang="tr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Fintel - Hesap ve Veri Silme</title>
+        <meta name="description" content="Fintel hesabını ve verilerini nasıl sileceğini adım adım öğren." />
+        <link rel="icon" href="../assets/favicon.ico" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://fintel.septimuslab.com/delete-account/" />
+        <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+        <link rel="manifest" href="../site.webmanifest" />
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="Fintel" />
+        <meta property="og:title" content="Fintel · Hesap ve Veri Silme" />
+        <meta property="og:description" content="Fintel hesabını ve hesabına bağlı tüm verileri uygulamadan nasıl sileceğin." />
+        <meta property="og:url" content="https://fintel.septimuslab.com/delete-account/" />
+        <meta property="og:image" content="https://fintel.septimuslab.com/assets/og/og-tr.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:locale" content="tr_TR" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Fintel · Hesap ve Veri Silme" />
+        <meta name="twitter:image" content="https://fintel.septimuslab.com/assets/og/og-tr.png" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            :root {
+                --brand-50: #f6f5f1;
+                --brand-100: #ece9e1;
+                --brand-200: #d9d4c6;
+                --brand-300: #e8c08a;
+                --brand-400: #e3a862;
+                --brand-500: #d08b3e;
+                --brand-600: #1b2a52;
+                --brand-700: #14203f;
+                --brand-800: #111830;
+                --brand-900: #0a0e1c;
+
+                --slate-50: #f8fafc;
+                --slate-100: #f1f5f9;
+                --slate-200: #e2e8f0;
+                --slate-300: #cbd5e1;
+                --slate-400: #94a3b8;
+                --slate-500: #64748b;
+                --slate-600: #475569;
+                --slate-700: #334155;
+                --slate-800: #1e293b;
+                --slate-900: #0f172a;
+
+                --orange-50: #f6f5f1;
+                --orange-100: #e3dfd2;
+                --orange-600: #8f5716;
+                --orange-700: #8f5716;
+                --orange-800: #5e3a0f;
+
+                --radius-sm: 8px;
+                --radius-md: 12px;
+                --radius-lg: 16px;
+                --radius-xl: 24px;
+                --radius-full: 9999px;
+
+                --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+                --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+                --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.08);
+                --shadow-xl: 0 16px 50px rgba(0, 0, 0, 0.1);
+
+                --font-display: "DM Sans", sans-serif;
+                --font-body: "DM Sans", sans-serif;
+                --font-hand: "DM Sans", sans-serif;
+            }
+
+            html {
+                scroll-behavior: smooth;
+            }
+
+            body {
+                font-family: var(--font-body);
+                background: var(--slate-50);
+                color: var(--slate-700);
+                line-height: 1.7;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+
+            ::selection {
+                background: var(--brand-100);
+                color: var(--brand-900);
+            }
+
+            a {
+                color: inherit;
+                text-decoration: none;
+            }
+            img {
+                display: block;
+                max-width: 100%;
+            }
+
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+            @keyframes pulseGlow {
+                0%,
+                100% {
+                    opacity: 0.4;
+                }
+                50% {
+                    opacity: 0.7;
+                }
+            }
+
+            .animate-up {
+                animation: fadeInUp 0.6s ease-out both;
+            }
+            .animate-fade {
+                animation: fadeIn 0.5s ease-out both;
+            }
+            .delay-1 {
+                animation-delay: 0.1s;
+            }
+            .delay-2 {
+                animation-delay: 0.2s;
+            }
+            .delay-3 {
+                animation-delay: 0.3s;
+            }
+
+            .navbar {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background: rgba(255, 255, 255, 0.92);
+                backdrop-filter: blur(20px) saturate(180%);
+                -webkit-backdrop-filter: blur(20px) saturate(180%);
+                border-bottom: 1px solid var(--slate-200);
+                transition: box-shadow 0.3s ease;
+            }
+            .navbar.scrolled {
+                box-shadow: 0 1px 20px rgba(0, 0, 0, 0.06);
+            }
+            .navbar-inner {
+                max-width: 1000px;
+                margin: 0 auto;
+                padding: 0 24px;
+                height: 64px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .brand {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                text-decoration: none;
+            }
+            .brand-lockup {
+                height: 38px;
+                width: auto;
+                display: block;
+            }
+            .brand-logo {
+                width: 40px;
+                height: 40px;
+                border-radius: var(--radius-md);
+                object-fit: cover;
+                box-shadow: var(--shadow-sm);
+                transition: transform 0.3s ease;
+            }
+            .brand:hover .brand-logo {
+                transform: scale(1.05);
+            }
+            .brand-text {
+                display: flex;
+                flex-direction: column;
+            }
+            .brand-name {
+                font-family: var(--font-display);
+                font-weight: 800;
+                font-size: 1.2rem;
+                color: var(--slate-900);
+                letter-spacing: -0.02em;
+                line-height: 1.1;
+            }
+            .brand-name span {
+                color: var(--brand-600);
+            }
+            .brand-subtitle {
+                font-size: 0.6rem;
+                color: var(--slate-400);
+                font-weight: 600;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+            }
+
+            .lang-toggle {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+            .lang-flag {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                cursor: pointer;
+                opacity: 0.6;
+                transition: all 0.3s ease;
+                border: 2px solid transparent;
+                object-fit: cover;
+            }
+            .lang-flag.active {
+                opacity: 1;
+                border-color: var(--brand-500);
+                transform: scale(1.1);
+                box-shadow: 0 2px 8px rgba(27, 42, 82, 0.3);
+            }
+            .lang-flag:hover {
+                opacity: 0.9;
+                transform: scale(1.05);
+            }
+            .nav-tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px; max-width: 1000px; margin: 0 auto; padding: 0 16px 10px; }
+            .nav-link { font-family: var(--font-display); font-size: 0.82rem; font-weight: 600; color: var(--slate-500); padding: 6px 14px; border-radius: var(--radius-full); transition: all 0.2s ease; text-decoration: none; }
+            .nav-link:hover { color: var(--brand-600); background: var(--brand-50); }
+            .nav-link.active { color: var(--brand-700); background: var(--brand-100); }
+
+            .hero {
+                position: relative;
+                background: white;
+                border-bottom: 1px solid var(--slate-100);
+                overflow: hidden;
+            }
+            .hero-bg {
+                position: absolute;
+                inset: 0;
+                overflow: hidden;
+                pointer-events: none;
+            }
+            .hero-orb {
+                position: absolute;
+                border-radius: 50%;
+                filter: blur(60px);
+                animation: pulseGlow 4s ease-in-out infinite;
+            }
+            .hero-orb--teal {
+                width: 300px;
+                height: 300px;
+                background: var(--brand-100);
+                top: -50px;
+                left: -80px;
+            }
+            .hero-orb--amber {
+                width: 250px;
+                height: 250px;
+                background: #ece9e1;
+                bottom: -60px;
+                right: -60px;
+                animation-delay: 1.5s;
+            }
+            .hero-orb--pink {
+                width: 180px;
+                height: 180px;
+                background: #f6f5f1;
+                top: 40%;
+                right: 20%;
+                animation-delay: 3s;
+            }
+            .hero-content {
+                position: relative;
+                z-index: 2;
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 72px 24px 56px;
+                text-align: center;
+            }
+            .hero-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 6px 16px;
+                border-radius: var(--radius-full);
+                background: var(--slate-50);
+                border: 1px solid var(--slate-200);
+                font-family: var(--font-display);
+                font-size: 0.7rem;
+                font-weight: 700;
+                color: var(--slate-500);
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                margin-bottom: 24px;
+            }
+            .hero-badge svg {
+                color: var(--brand-500);
+            }
+            .hero-title {
+                font-family: var(--font-display);
+                font-size: clamp(2.2rem, 5vw, 3.5rem);
+                font-weight: 800;
+                color: var(--slate-900);
+                letter-spacing: -0.03em;
+                line-height: 1.1;
+                margin-bottom: 20px;
+            }
+            .hero-desc {
+                font-size: 1.1rem;
+                color: var(--slate-500);
+                max-width: 600px;
+                margin: 0 auto 28px;
+                line-height: 1.7;
+            }
+            .hero-meta {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                font-size: 0.8rem;
+                color: var(--slate-400);
+                font-weight: 500;
+            }
+            .hero-meta svg {
+                width: 14px;
+                height: 14px;
+            }
+
+            .disclaimer {
+                background: linear-gradient(135deg, var(--brand-900), var(--slate-900));
+                color: white;
+                padding: 14px 24px;
+                text-align: center;
+                font-size: 0.82rem;
+                font-weight: 500;
+                line-height: 1.5;
+                position: relative;
+                z-index: 10;
+            }
+            .disclaimer strong {
+                font-weight: 700;
+            }
+
+            .main-content {
+                max-width: 1000px;
+                margin: 0 auto;
+                padding: 48px 24px 64px;
+            }
+
+            .accordion-list {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+            .accordion-item {
+                background: white;
+                border: 1px solid var(--slate-200);
+                border-radius: var(--radius-lg);
+                overflow: hidden;
+                transition: all 0.3s ease;
+            }
+            .accordion-item:hover {
+                border-color: var(--brand-200);
+                box-shadow: 0 2px 16px rgba(27, 42, 82, 0.06);
+            }
+            .accordion-item.open {
+                border-color: var(--brand-300);
+                box-shadow: 0 4px 24px rgba(27, 42, 82, 0.08);
+            }
+            .accordion-trigger {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 20px 24px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                text-align: left;
+                font-family: var(--font-body);
+                transition: background 0.2s ease;
+            }
+            .accordion-trigger:hover {
+                background: var(--slate-50);
+            }
+            .accordion-trigger-left {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+            }
+            .accordion-icon-wrap {
+                width: 44px;
+                height: 44px;
+                border-radius: var(--radius-md);
+                background: var(--brand-50);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--brand-600);
+                flex-shrink: 0;
+                transition: all 0.3s ease;
+            }
+            .accordion-item:hover .accordion-icon-wrap,
+            .accordion-item.open .accordion-icon-wrap {
+                background: var(--brand-500);
+                color: white;
+            }
+            .accordion-icon-wrap svg {
+                width: 20px;
+                height: 20px;
+            }
+            .accordion-title {
+                font-family: var(--font-display);
+                font-size: 1.05rem;
+                font-weight: 700;
+                color: var(--slate-800);
+                transition: color 0.2s ease;
+            }
+            .accordion-item:hover .accordion-title {
+                color: var(--brand-700);
+            }
+            .accordion-chevron {
+                width: 32px;
+                height: 32px;
+                border-radius: var(--radius-full);
+                border: 1px solid var(--slate-200);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--slate-400);
+                flex-shrink: 0;
+                transition: all 0.3s ease;
+            }
+            .accordion-item.open .accordion-chevron {
+                transform: rotate(180deg);
+                border-color: var(--brand-300);
+                color: var(--brand-600);
+                background: var(--brand-50);
+            }
+            .accordion-chevron svg {
+                width: 16px;
+                height: 16px;
+            }
+            .accordion-body {
+                max-height: 0;
+                opacity: 0;
+                overflow: hidden;
+                transition:
+                    max-height 0.4s ease,
+                    opacity 0.3s ease;
+            }
+            .accordion-item.open .accordion-body {
+                max-height: 800px;
+                opacity: 1;
+            }
+            .accordion-body-inner {
+                padding: 0 24px 24px 84px;
+                font-size: 0.92rem;
+                color: var(--slate-600);
+                line-height: 1.8;
+            }
+            .accordion-body-inner p {
+                margin-bottom: 12px;
+            }
+            .accordion-body-inner ul {
+                list-style: none;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .accordion-body-inner li {
+                padding-left: 20px;
+                position: relative;
+            }
+            .accordion-body-inner li::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 10px;
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background: var(--brand-400);
+            }
+            .accordion-body-inner li strong {
+                color: var(--slate-800);
+                font-weight: 600;
+            }
+            .info-box {
+                background: var(--orange-50);
+                border: 1px solid var(--orange-100);
+                border-radius: var(--radius-md);
+                padding: 16px 20px;
+                margin: 12px 0;
+            }
+            .info-box-title {
+                font-weight: 700;
+                color: var(--orange-800);
+                font-size: 0.88rem;
+                margin-bottom: 4px;
+            }
+            .info-box p {
+                font-size: 0.84rem;
+                color: var(--orange-700);
+                margin: 0;
+            }
+            .text-muted {
+                font-size: 0.84rem;
+                color: var(--slate-500);
+            }
+
+            .cta-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+                margin-top: 48px;
+            }
+            @media (max-width: 600px) {
+                .cta-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            .card {
+                position: relative;
+                background: white;
+                border: 1px solid var(--slate-200);
+                border-radius: var(--radius-xl);
+                overflow: hidden;
+                transition: all 0.3s ease;
+            }
+            .card:hover {
+                box-shadow: var(--shadow-lg);
+                transform: translateY(-2px);
+            }
+            .card-accent {
+                height: 3px;
+                background: linear-gradient(90deg, var(--brand-400), var(--brand-600));
+            }
+            .card-body {
+                padding: 32px 28px;
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 16px;
+            }
+            .card-icon {
+                width: 52px;
+                height: 52px;
+                border-radius: var(--radius-full);
+                background: var(--slate-100);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--slate-400);
+            }
+            .card-icon svg {
+                width: 24px;
+                height: 24px;
+            }
+            .card-title {
+                font-family: var(--font-display);
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: var(--slate-900);
+            }
+            .card-desc {
+                font-size: 0.88rem;
+                color: var(--slate-500);
+                line-height: 1.6;
+            }
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                padding: 14px 28px;
+                border-radius: var(--radius-md);
+                font-family: var(--font-display);
+                font-size: 0.88rem;
+                font-weight: 700;
+                border: none;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-decoration: none;
+            }
+            .btn svg {
+                width: 18px;
+                height: 18px;
+            }
+            .btn-dark {
+                background: var(--slate-900);
+                color: white;
+            }
+            .btn-dark:hover {
+                background: var(--brand-600);
+                box-shadow: 0 4px 20px rgba(27, 42, 82, 0.3);
+                transform: translateY(-1px);
+            }
+            .btn-play {
+                background: var(--slate-900);
+                color: white;
+                gap: 10px;
+            }
+            .btn-play:hover {
+                background: var(--brand-600);
+                box-shadow: 0 4px 20px rgba(27, 42, 82, 0.3);
+                transform: translateY(-1px);
+            }
+            .store-dl { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+            .btn-store { width: 100%; }
+            .btn-appstore { background: var(--slate-900); color: #fff; gap: 10px; }
+            .btn-appstore:hover { background: var(--brand-600); box-shadow: 0 4px 20px rgba(27, 42, 82, 0.3); transform: translateY(-1px); }
+            .btn-soon { background: var(--slate-200); color: var(--slate-500); cursor: default; pointer-events: none; }
+            .btn-soon-tag { font-size: 0.72em; font-weight: 600; opacity: 0.75; margin-left: 6px; }
+
+            .footer {
+                border-top: 1px solid var(--slate-200);
+                background: white;
+                padding: 20px 24px;
+            }
+            .footer-inner {
+                max-width: 1000px;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            .footer-brand {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .footer-brand img {
+                width: auto;
+                height: 20px;
+                opacity: 0.85;
+            }
+            .footer-link {
+                font-size: 0.82rem;
+                font-weight: 500;
+                color: var(--slate-400);
+                transition: color 0.2s ease;
+            }
+            .footer-link:hover {
+                color: var(--brand-600);
+            }
+            .footer-copy {
+                font-size: 0.78rem;
+                color: var(--slate-400);
+            }
+
+            @media (max-width: 640px) {
+                .hero-content {
+                    padding: 48px 20px 40px;
+                }
+                .hero-title {
+                    font-size: 2rem;
+                }
+                .hero-desc {
+                    font-size: 0.95rem;
+                }
+                .accordion-trigger {
+                    padding: 16px 18px;
+                }
+                .accordion-body-inner {
+                    padding: 0 18px 20px 18px;
+                }
+                .accordion-trigger-left {
+                    gap: 12px;
+                }
+                .accordion-icon-wrap {
+                    width: 38px;
+                    height: 38px;
+                }
+                .accordion-title {
+                    font-size: 0.92rem;
+                }
+                .card-body {
+                    padding: 24px 20px;
+                }
+                .lang-flag {
+                    width: 28px;
+                    height: 28px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar" id="navbar">
+            <div class="navbar-inner">
+                <a href="https://fintel.septimuslab.com" class="brand">
+                    <img src="../assets/brand/lockup-h-light.svg" alt="Fintel" class="brand-lockup" width="182" height="38" />
+                </a>
+            </div>
+            <div class="nav-tabs" id="navTabs"></div>
+        </nav>
+
+        <header class="hero">
+            <div class="hero-bg">
+                <div class="hero-orb hero-orb--teal"></div>
+                <div class="hero-orb hero-orb--amber"></div>
+                <div class="hero-orb hero-orb--pink"></div>
+            </div>
+            <div class="hero-content">
+                <div class="hero-badge animate-up">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+                    <span id="hero-badge-text">Yardım Merkezi</span>
+                </div>
+                <h1 class="hero-title animate-up delay-1" id="hero-title">Hesap ve Veri Silme</h1>
+                <p class="hero-desc animate-up delay-2" id="hero-desc">Fintel hesabını ve hesabına bağlı tüm verileri istediğin zaman silebilirsin. Silme kalıcıdır ve geri alınamaz.</p>
+                <div class="hero-meta animate-up delay-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    <span id="hero-date-label">Son Güncelleme:</span> <span>15.11.2026</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="disclaimer" id="disclaimer"><strong>YASAL UYARI:</strong> Fintel finansal danışmanlık vermez. Nova'nın yorumları yalnızca bilgilendirme amaçlıdır ve yatırım, vergi ya da hukuk tavsiyesi yerine geçmez.</div>
+
+        <main class="main-content">
+            <div class="accordion-list" id="accordion-list"></div>
+
+            <div class="cta-grid">
+                <div class="card animate-up">
+                    <div class="card-accent"></div>
+                    <div class="card-body">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="20" height="16" x="2" y="4" rx="2" />
+                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                            </svg>
+                        </div>
+                        <h3 class="card-title" id="contact-title">İletişime Geç</h3>
+                        <p class="card-desc" id="contact-desc">Silme sırasında sorun mu yaşıyorsun? E-posta ile bize ulaş.</p>
+                        <a href="mailto:info@septimuslab.com" class="btn btn-dark">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="20" height="16" x="2" y="4" rx="2" />
+                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                            </svg>
+                            info@septimuslab.com
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card animate-up delay-1">
+                    <div class="card-accent" style="background: linear-gradient(90deg, #e3a862, #d08b3e)"></div>
+                    <div class="card-body">
+                        <div class="card-icon" style="background: #f6f5f1; color: #ea580c">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+                        </div>
+                        <h3 class="card-title" id="play-title">Uygulamayı İndir</h3>
+                        <p class="card-desc" id="play-desc">Fintel'i Google Play'den ücretsiz indir.</p>
+                        <div class="store-dl">
+                            <span class="btn btn-store btn-soon" aria-disabled="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+                                App Store
+                                <span class="btn-soon-tag">Çok yakında</span>
+                            </span>
+                            <a href="https://play.google.com/store/apps/details?id=com.fintel.app" target="_blank" rel="noopener" class="btn btn-store btn-play">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+                                Google Play
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <a href="https://septimuslab.com" target="_blank" rel="noopener" class="footer-link" style="font-weight: 600; color: var(--slate-600)"> <img src="../assets/septimuslab/septimuslab-imza-acik-zemin.svg" alt="by SeptimusLab" width="164" height="21" /> </a>
+                </div>
+                <p class="footer-copy">&copy; 2026 Fintel by <a href="https://septimuslab.com" target="_blank" rel="noopener" style="color: var(--brand-600); font-weight: 500">SeptimusLab</a>. <span id="footer-rights">Tüm Hakları Saklıdır.</span></p>
+            </div>
+        </footer>
+
+        <script>
+            const icons = {
+                data: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>',
+                ai: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4z"/><circle cx="9" cy="15" r="1"/><circle cx="15" cy="15" r="1"/></svg>',
+                money: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>',
+                trash: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>',
+                users: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+                lock: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg>',
+            };
+
+            const i18n = {
+                tr: {
+                    badge: "Yardım Merkezi",
+                    title: "Hesap ve Veri Silme",
+                    desc: "Fintel hesabını ve hesabına bağlı tüm verileri istediğin zaman silebilirsin. Silme kalıcıdır ve geri alınamaz.",
+                    dateLabel: "Son Güncelleme:",
+                    disclaimer: "<strong>YASAL UYARI:</strong> Fintel finansal danışmanlık vermez. Nova'nın yorumları yalnızca bilgilendirme amaçlıdır ve yatırım, vergi ya da hukuk tavsiyesi yerine geçmez.",
+                    contactTitle: "İletişime Geç",
+                    contactDesc: "Silme sırasında sorun mu yaşıyorsun? E-posta ile bize ulaş.",
+                    playTitle: "Uygulamayı İndir",
+                    playDesc: "Fintel'i Google Play'den ücretsiz indir.",
+                    rights: "Tüm Hakları Saklıdır.",
+                    sections: [
+                        {
+                            icon: "trash",
+                            title: "1. Hesabımı ve verilerimi nasıl silerim?",
+                            html: "<p>Fintel hesabını ve hesabına bağlı tüm verileri istediğin zaman silebilirsin. Silme kalıcıdır ve geri alınamaz.</p><p><strong>Uygulamadan:</strong></p><ul><li>Ayarlar'ı aç ve <strong>Verilerim</strong> bölümüne gir.</li><li><strong>\"Hesabımı sil\"</strong> düğmesine dokun, onay penceresinde <strong>\"Evet, kalıcı olarak sil\"</strong> seç.</li><li>Kimliğini doğrula: Google ya da Apple ile girdiysen o hesapla yeniden onay verirsin, e-posta ile girdiysen parolanı yazarsın.</li><li>İşlem bitince hesabın kapanır ve giriş ekranına dönersin.</li></ul><p><strong>Neler silinir?</strong> Tüm gelir ve gider kayıtların, taksitler, dönemlerin, düzenli ödemelerin, ayarların, Nova profilin, günlük kullanım sayacın ve giriş hesabın. Fiş görselleri ve Nova sohbet mesajları zaten sunucumuzda saklanmaz.</p><p><strong>Hesapsız kullanıyorsan:</strong> Verilerin yalnızca cihazındadır. Verilerim bölümündeki <strong>\"Cihazdaki veriyi sil\"</strong> ile ya da uygulamayı telefondan kaldırarak silebilirsin.</p><p><strong>Uygulamaya erişemiyorsan:</strong> Kayıt olduğun e-posta adresinden <strong>info@septimuslab.com</strong> adresine \"Hesap silme\" konulu bir e-posta gönder. Hesabın sahibi olduğunu doğruladıktan sonra hesabını ve verilerini sileriz.</p><p>Detaylar için <a href='../privacy-policy/'>Gizlilik Politikası</a>'na bak.</p>",
+                        },
+                    ],
+                },
+            };
+
+            let currentLang = "tr";
+            let openIndex = null;
+
+            function render(lang) {
+                const d = i18n[lang];
+
+                document.getElementById("hero-badge-text").textContent = d.badge;
+                document.getElementById("hero-title").textContent = d.title;
+                document.getElementById("hero-desc").textContent = d.desc;
+                document.getElementById("hero-date-label").textContent = d.dateLabel;
+
+                document.getElementById("disclaimer").innerHTML = d.disclaimer;
+
+                document.getElementById("contact-title").textContent = d.contactTitle;
+                document.getElementById("contact-desc").textContent = d.contactDesc;
+                document.getElementById("play-title").textContent = d.playTitle;
+                document.getElementById("play-desc").textContent = d.playDesc;
+
+                document.getElementById("footer-rights").textContent = d.rights;
+
+                const list = document.getElementById("accordion-list");
+                list.innerHTML = "";
+
+                d.sections.forEach(function (section, i) {
+                    var item = document.createElement("div");
+                    item.className = "accordion-item animate-up";
+                    item.style.animationDelay = i * 0.08 + "s";
+                    if (openIndex === i) item.classList.add("open");
+
+                    item.innerHTML =
+                        '<button class="accordion-trigger" data-index="' +
+                        i +
+                        '">' +
+                        '<div class="accordion-trigger-left">' +
+                        '<div class="accordion-icon-wrap">' +
+                        (icons[section.icon] || icons.data) +
+                        "</div>" +
+                        '<span class="accordion-title">' +
+                        section.title +
+                        "</span>" +
+                        "</div>" +
+                        '<div class="accordion-chevron">' +
+                        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>' +
+                        "</div>" +
+                        "</button>" +
+                        '<div class="accordion-body">' +
+                        '<div class="accordion-body-inner">' +
+                        section.html +
+                        "</div>" +
+                        "</div>";
+
+                    list.appendChild(item);
+                });
+
+                document.querySelectorAll(".accordion-trigger").forEach(function (btn) {
+                    btn.addEventListener("click", function () {
+                        var idx = parseInt(this.getAttribute("data-index"));
+                        toggleAccordion(idx);
+                    });
+                });
+            }
+
+            function toggleAccordion(idx) {
+                var items = document.querySelectorAll(".accordion-item");
+                items.forEach(function (item, i) {
+                    if (i === idx) {
+                        item.classList.toggle("open");
+                        openIndex = item.classList.contains("open") ? idx : null;
+                    } else {
+                        item.classList.remove("open");
+                    }
+                });
+            }
+
+            window.addEventListener("scroll", function () {
+                document.getElementById("navbar").classList.toggle("scrolled", window.scrollY > 10);
+            });
+
+            const NAV_LABELS = {
+                tr: { app: "Uygulama", privacy: "Gizlilik", terms: "Koşullar", support: "Destek" }
+            };
+            const NAV_LINKS = [
+                { key: "app", href: "/marketing/" },
+                { key: "privacy", href: "/privacy-policy/" },
+                { key: "terms", href: "/terms/" },
+                { key: "support", href: "/support/" }
+            ];
+            const NAV_ACTIVE = "support";
+            function renderNav(lang) {
+                const L = NAV_LABELS[lang] || NAV_LABELS.tr;
+                const el = document.getElementById("navTabs");
+                if (!el) return;
+                el.innerHTML = NAV_LINKS.map(function (l) {
+                    return '<a href="' + l.href + '" class="nav-link' + (l.key === NAV_ACTIVE ? " active" : "") + '">' + L[l.key] + "</a>";
+                }).join("");
+            }
+            window.renderNav = renderNav;
+            renderNav("tr");
+
+            render("tr");
+        </script>
+        <script src="../assets/site-footer.js"></script>
+    </body>
+</html>
